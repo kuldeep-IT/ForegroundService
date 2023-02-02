@@ -5,8 +5,10 @@ import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Build;
 import android.os.IBinder;
 
@@ -19,9 +21,16 @@ import com.dada.mediumservice.app.MyApp;
 
 public class AutoStartService extends Service {
 
+    private StartUpBootReceiver startUpBootReceiver;
+
     @Override
     public void onCreate() {
         super.onCreate();
+
+        startUpBootReceiver = new StartUpBootReceiver();
+        IntentFilter filter = new IntentFilter(Intent.ACTION_PACKAGE_ADDED);
+        registerReceiver(startUpBootReceiver, filter);
+
     }
 
     @Override
@@ -48,6 +57,7 @@ public class AutoStartService extends Service {
     @Override
     public void onDestroy() {
         super.onDestroy();
+        unregisterReceiver(startUpBootReceiver);
     }
 
 
@@ -57,4 +67,7 @@ public class AutoStartService extends Service {
     public IBinder onBind(Intent intent) {
         return null;
     }
+
+
+
 }

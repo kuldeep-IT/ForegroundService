@@ -1,8 +1,10 @@
 package com.dada.mediumservice.app;
 
+import android.app.ActivityManager;
 import android.app.Application;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.content.Context;
 import android.os.Build;
 
 public class MyApp  extends Application {
@@ -17,6 +19,10 @@ public class MyApp  extends Application {
     public void onCreate() {
         super.onCreate();
         createNotificationChannel();
+
+
+
+
     }
     private void createNotificationChannel() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -28,6 +34,17 @@ public class MyApp  extends Application {
             NotificationManager manager = getSystemService(NotificationManager.class);
             manager.createNotificationChannel(serviceChannel);
         }
+    }
+
+    //is Service is Running or Not
+    public static boolean isServiceRunningInForeground(Context context, Class<?> serviceClass) {
+        ActivityManager manager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
+            if (serviceClass.getName().equals(service.service.getClassName())) {
+                return service.foreground;
+            }
+        }
+        return false;
     }
 
 }
