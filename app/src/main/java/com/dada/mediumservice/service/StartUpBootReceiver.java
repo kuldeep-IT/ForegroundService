@@ -19,6 +19,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -166,6 +167,9 @@ public class StartUpBootReceiver  extends BroadcastReceiver {
        TextView title = floatingView.findViewById(R.id.tvTitle);
        title.setText("Jai Dada");
 
+        Button cancelButton = floatingView.findViewById(R.id.btnCancel);
+
+
         final WindowManager.LayoutParams params = new WindowManager.LayoutParams(
                 WindowManager.LayoutParams.WRAP_CONTENT,
                 WindowManager.LayoutParams.WRAP_CONTENT,
@@ -176,7 +180,18 @@ public class StartUpBootReceiver  extends BroadcastReceiver {
         windowManager = (WindowManager) context.getSystemService(WINDOW_SERVICE);
         windowManager.addView(floatingView, params);
 
+        cancelButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+//                stopSelf();
+                if (floatingView != null) windowManager.removeView(floatingView);
+
+            }
+        });
+
     }
+
+
 
 
 }
