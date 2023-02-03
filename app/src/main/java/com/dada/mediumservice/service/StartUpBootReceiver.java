@@ -36,6 +36,7 @@ import com.dada.mediumservice.app.MyApp;
 
 import org.w3c.dom.Text;
 
+//move code to foreground ->  foreground_service
 public class StartUpBootReceiver  extends BroadcastReceiver {
    /* @Override
     public void onReceive(Context context, Intent intent) {
