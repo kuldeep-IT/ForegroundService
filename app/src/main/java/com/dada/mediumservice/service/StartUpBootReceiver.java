@@ -50,6 +50,7 @@ public class StartUpBootReceiver  extends BroadcastReceiver {
     private View floatingView;
     private WindowManager windowManager;
     TextView title;
+    String appName;
     @Override
     public void onReceive(Context context, Intent intent) {
         /*if (Intent.ACTION_PACKAGE_ADDED.equals(intent.getAction())) {
@@ -69,7 +70,7 @@ public class StartUpBootReceiver  extends BroadcastReceiver {
         if (intent.getAction().equals(Intent.ACTION_PACKAGE_ADDED)) {
             String packageName = intent.getData().getSchemeSpecificPart();
 
-            String appName = MyApp.getAppNameFromPkgName(context,packageName);
+            appName = MyApp.getAppNameFromPkgName(context,packageName);
 
             showNotifcation(context,"New App Detected","Here is your new app: "+appName);
 
@@ -171,7 +172,8 @@ public class StartUpBootReceiver  extends BroadcastReceiver {
 
        title = floatingView.findViewById(R.id.tvTitle);
        title.setText("Jai Dada");
-
+       TextView tvAppName = floatingView.findViewById(R.id.tvAppName);
+       tvAppName.setText(appName.toString());
         Button cancelButton = floatingView.findViewById(R.id.btnCancel);
 
 
