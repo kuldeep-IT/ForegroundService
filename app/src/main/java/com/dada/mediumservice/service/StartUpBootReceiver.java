@@ -10,6 +10,8 @@ import android.app.NotificationManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.graphics.PixelFormat;
 import android.net.Uri;
 import android.os.Build;
@@ -47,6 +49,7 @@ public class StartUpBootReceiver  extends BroadcastReceiver {
 
     private View floatingView;
     private WindowManager windowManager;
+    TextView title;
     @Override
     public void onReceive(Context context, Intent intent) {
         /*if (Intent.ACTION_PACKAGE_ADDED.equals(intent.getAction())) {
@@ -70,11 +73,13 @@ public class StartUpBootReceiver  extends BroadcastReceiver {
 
             showNotifcation(context,"New App Detected","Here is your new app: "+appName);
 
+            showFloatingWindow(context);
+
+            showRequestedPermissions(context,packageName);
 //            openWindow(context);
 
 //            showAlertDialog(context);
 
-            showFloatingWindow(context);
 
             Toast.makeText(context, "Package Added: " + packageName, Toast.LENGTH_SHORT).show();
             Log.d("NEW_APP_DETECTED", "Here is your new app: "+packageName);
@@ -164,7 +169,7 @@ public class StartUpBootReceiver  extends BroadcastReceiver {
     private void showFloatingWindow(Context context){
         floatingView = LayoutInflater.from(context).inflate(R.layout.permission_floating_layout, null);
 
-       TextView title = floatingView.findViewById(R.id.tvTitle);
+       title = floatingView.findViewById(R.id.tvTitle);
        title.setText("Jai Dada");
 
         Button cancelButton = floatingView.findViewById(R.id.btnCancel);
@@ -191,7 +196,24 @@ public class StartUpBootReceiver  extends BroadcastReceiver {
 
     }
 
+    private void showRequestedPermissions(Context context, String packageName){
+        PackageManager packageManager = context.getPackageManager();
+        StringBuilder builder = new StringBuilder();
+        try {
+            PackageInfo packageInfo = packageManager.getPackageInfo(packageName, PackageManager.GET_PERMISSIONS);
+            String[] requestedPermissions = packageInfo.requestedPermissions;
 
+            if (requestedPermissions != null) {
+                for (String permission : requestedPermissions) {
+                    Log.i("REQ_PER_MISSION_LIST", permission);
+                    builder.append(permission + "\n");
+                }
+            }
+        } catch (PackageManager.NameNotFoundException e) {
+            Log.e("Permissions", "Error getting package info", e);
+        }
 
+        title.setText(builder.toString());
 
+    }
 }
