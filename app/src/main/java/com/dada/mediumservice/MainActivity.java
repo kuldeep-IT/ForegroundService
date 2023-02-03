@@ -24,7 +24,7 @@ public class MainActivity extends AppCompatActivity {
      * */
 
     private StartUpBootReceiver startUpBootReceiver;
-
+    public static String[] requestedPermissions;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,10 +33,11 @@ public class MainActivity extends AppCompatActivity {
         Log.d("IS_SERVICE_RUNNING", "onCreate: "+ MyApp.isServiceRunningInForeground(MainActivity.this, AutoStartService.class));
         /* MyApp.isServiceRunningInForeground(MainActivity.this, AutoStartService.class);*/
 
-
+/*
         IntentFilter filter = new IntentFilter(Intent.ACTION_PACKAGE_ADDED);
         filter.addDataScheme("package");
         registerReceiver(mReceiver, filter);
+        */
     }
 
     public void startService(View v) {
@@ -65,7 +66,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     //Extra added
-    private BroadcastReceiver mReceiver = new BroadcastReceiver() {
+   /* private BroadcastReceiver mReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             if (intent.getAction().equals(Intent.ACTION_PACKAGE_ADDED)) {
@@ -81,5 +82,5 @@ public class MainActivity extends AppCompatActivity {
 
 
     };
-
+*/
 }

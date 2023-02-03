@@ -5,6 +5,8 @@ import android.app.Application;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.Context;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager;
 import android.os.Build;
 
 public class MyApp  extends Application {
@@ -45,6 +47,20 @@ public class MyApp  extends Application {
             }
         }
         return false;
+    }
+
+
+
+    public static String getAppNameFromPkgName(Context context, String Packagename) {
+        try {
+            PackageManager packageManager = context.getPackageManager();
+            ApplicationInfo info = packageManager.getApplicationInfo(Packagename, PackageManager.GET_META_DATA);
+            String appName = (String) packageManager.getApplicationLabel(info);
+            return appName;
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+            return "";
+        }
     }
 
 }
