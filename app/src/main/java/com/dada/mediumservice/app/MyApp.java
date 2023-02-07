@@ -5,9 +5,14 @@ import android.app.Application;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.os.Build;
+import android.util.Log;
+
+import com.dada.mediumservice.service.StartUpBootReceiver;
 
 public class MyApp  extends Application {
 
@@ -22,7 +27,13 @@ public class MyApp  extends Application {
         super.onCreate();
         createNotificationChannel();
 
-
+        //      BroadCast receiver
+ /*       IntentFilter filter = new IntentFilter();
+        filter.addAction(Intent.ACTION_PACKAGE_ADDED);
+        filter.addDataScheme("package");
+        StartUpBootReceiver startUpBootReceiver = new StartUpBootReceiver();
+        registerReceiver(startUpBootReceiver, filter);
+*/
 
 
     }
@@ -43,9 +54,12 @@ public class MyApp  extends Application {
         ActivityManager manager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
         for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
             if (serviceClass.getName().equals(service.service.getClassName())) {
+                Log.i ("Service status", "Running");
+
                 return service.foreground;
             }
         }
+        Log.i ("Service status", "Not running");
         return false;
     }
 

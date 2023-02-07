@@ -29,6 +29,7 @@ import android.widget.Toast;
 import androidx.annotation.LongDef;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
+import androidx.core.content.ContextCompat;
 
 import com.dada.mediumservice.MainActivity;
 import com.dada.mediumservice.R;
@@ -52,21 +53,42 @@ public class StartUpBootReceiver  extends BroadcastReceiver {
     private WindowManager windowManager;
     TextView title;
     String appName;
+
     @Override
     public void onReceive(Context context, Intent intent) {
-        /*if (Intent.ACTION_PACKAGE_ADDED.equals(intent.getAction())) {
-            String packageName = intent.getData().getSchemeSpecificPart();
-            // Perform operations when a new package is installed
-            Toast.makeText(context, "Package Added: " + packageName, Toast.LENGTH_SHORT).show();
-
-            Log.d("HAlo", "Package Added: " + packageName);
-        }*/
 
         Log.d("NEW_APP_DETECTED", "Intent Action: " + intent.getAction());
         Uri data = intent.getData();
         Log.d("NEW_APP_DETECTED", " Intent DATA: " + data);
 
+            Log.i("Broadcast Listened", "Service tried to stop");
+        Toast.makeText(context, "Service restarted", Toast.LENGTH_SHORT).show();
 
+        //For the foreGround Service
+        if (intent.getAction().equals(Intent.ACTION_PACKAGE_ADDED)) {
+            String packageName = intent.getData().getSchemeSpecificPart();
+            Toast.makeText(context, "New package added", Toast.LENGTH_SHORT).show();
+
+            appName = MyApp.getAppNameFromPkgName(context, packageName);
+
+            Intent autoStartService = new Intent(context, AutoStartService.class);
+            autoStartService.putExtra("PACKAGE_NAME", packageName);
+            autoStartService.putExtra("APP_NAME", appName);
+//            context.startService(autoStartService);
+//            ContextCompat.startForegroundService(context, autoStartService);
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                context.startForegroundService(autoStartService);
+            } else {
+                context.startService(autoStartService);
+            }
+
+        }
+
+        /*
+            Broadcast receiver added
+        */
+       /*
         //second added
         if (intent.getAction().equals(Intent.ACTION_PACKAGE_ADDED)) {
             String packageName = intent.getData().getSchemeSpecificPart();
@@ -91,7 +113,7 @@ public class StartUpBootReceiver  extends BroadcastReceiver {
                     .setContentText(packageName + " was installed.");
             NotificationManager manager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
             manager.notify(0, builder.build());
-        }
+        }*/
     }
 
     private void showNotifcation(Context context, String title, String body) {

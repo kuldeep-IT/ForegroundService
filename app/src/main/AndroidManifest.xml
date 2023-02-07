@@ -50,18 +50,22 @@
         </receiver>-->
 
 
-        <receiver android:name=".service.StartUpBootReceiver"
+        <receiver
+            android:name=".service.StartUpBootReceiver"
+            android:enabled="true"
             android:exported="true">
             <intent-filter>
+<!--                <action android:name="restartservice" />-->
                 <action android:name="android.intent.action.PACKAGE_ADDED"/>
                 <data android:scheme="package"/>
             </intent-filter>
         </receiver>
 
         <service
-            android:name=".service.AutoStartService"
+            android:name="com.dada.mediumservice.service.AutoStartService"
             android:enabled="true"
-            android:exported="true" />
+            />
+        <!--            android:exported="true" -->
 
 
     </application>
